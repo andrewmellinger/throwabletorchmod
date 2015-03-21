@@ -1,0 +1,16 @@
+[
+{
+  "modid": "throwabletorchmod",
+  "name": "ThrowableTorchMod",
+  "description": "Allows you to throw a sticky torch.",
+  "version": "1.0.0",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Andrew Mellinger"],
+  "credits": "For Virginia.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
