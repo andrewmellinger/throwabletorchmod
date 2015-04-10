@@ -1,17 +1,21 @@
 package com.crashbox.throwabletorchmod;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
 
 
 // See:
@@ -62,6 +66,17 @@ public class ThrowableTorchMod
                 'S', Items.slime_ball
         );
 
+        if(event.getSide() == Side.CLIENT)
+        {
+            RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_TORCH, 0,
+                    new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
+                            ItemThrowableTorch.ID, "inventory"));
+        }
+
+
+
         proxy.init(event);
     }
 
@@ -71,6 +86,4 @@ public class ThrowableTorchMod
         // Handle interaction with other mods, complete your setup based on this.
         proxy.postInit(event);
     }
-
-
 }

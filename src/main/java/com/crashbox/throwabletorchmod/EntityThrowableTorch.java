@@ -1,19 +1,26 @@
 package com.crashbox.throwabletorchmod;
 
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 
 /**
  * Created by andrew on 2/22/15.
  */
 public class EntityThrowableTorch extends EntityThrowable
 {
+    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+
     public EntityThrowableTorch(World world)
     {
         super(world);
@@ -39,6 +46,10 @@ public class EntityThrowableTorch extends EntityThrowable
         {
             int x, y, z;
             boolean dropItem = false;
+            BlockPos pos = mop.getBlockPos();
+            BlockPos origPos = mop.getBlockPos();
+            IBlockState state = Blocks.torch.getDefaultState();
+            IBlockState withFacing = state;
 
             // Place a single torch if we didn't hit an entity
             if (mop.entityHit != null)
@@ -52,44 +63,46 @@ public class EntityThrowableTorch extends EntityThrowable
             }
             else
             {
-                x = mop.blockX;
-                y = mop.blockY;
-                z = mop.blockZ;
+                x = pos.getX();
+                y = pos.getY();
+                z = pos.getZ();
 
                 // We want to move to the side based on the hit.
                 switch (mop.sideHit)
                 {
-                    case 0:
+                    case DOWN: // 0
                         // Bottom
                         y = y - 1;
                         break;
-                    case 1:
+                    case UP: // 1
                         // Top
                         y = y + 1;
                         break;
-                    case 2:
-                        // North (neg Z)
+                    case NORTH: // 2
+                        withFacing = state.withProperty(FACING, EnumFacing.NORTH);
                         z = z - 1;
                         break;
-                    case 3:
-                        // South
+                    case SOUTH: // 3:
+                        withFacing = state.withProperty(FACING, EnumFacing.SOUTH);
                         z = z + 1;
                         break;
-                    case 4:
-                        // West
+                    case WEST: // 4:
+                        withFacing = state.withProperty(FACING, EnumFacing.WEST);
                         x = x - 1;
                         break;
-                    case 5:
-                        // East
+                    case EAST: // 5:
+                        withFacing = state.withProperty(FACING, EnumFacing.EAST);
                         x = x + 1;
                         break;
                 }
 
+                // Update the block position
+                pos = new BlockPos(x, y, z);
             }
 
-            if (worldObj.isAirBlock(x, y, z) && ! dropItem)
+            if (!dropItem && worldObj.isAirBlock(pos))
             {
-                worldObj.setBlock(x, y, z, Blocks.torch);
+                worldObj.setBlockState(pos, withFacing);
             }
             else
             {
@@ -99,4 +112,5 @@ public class EntityThrowableTorch extends EntityThrowable
             setDead();
         }
     }
+
 }

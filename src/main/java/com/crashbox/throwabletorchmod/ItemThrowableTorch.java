@@ -1,6 +1,6 @@
 package com.crashbox.throwabletorchmod;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,7 +27,7 @@ public class ItemThrowableTorch extends Item
         setCreativeTab(CreativeTabs.tabDecorations);
 
         setUnlocalizedName(ID);
-        setTextureName("throwableTorchMod:throwableTorch");
+        //setTextureName("throwableTorchMod:throwableTorch");
     }
 
     /**
