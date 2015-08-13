@@ -28,7 +28,7 @@ public class ThrowableTorchMod
     // http://greyminecraftcoder.blogspot.com/2013/11/how-forge-starts-up-your-code.html
     public static final String MODID = "throwabletorchmod";
     public static final String NAME = "ThrowableTorchMod";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.1.0";
 
     // These are the blocks and items we load that other parts need to use.
     public static ItemThrowableTorch ITEM_THROWABLE_TORCH;
@@ -58,12 +58,18 @@ public class ThrowableTorchMod
         EntityRegistry.registerModEntity(EntityThrowableTorch.class, "Throwable Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
-        // Do your mod setup. Build whatever data structures you care about. Register recipes.
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_TORCH),
                 "T",
                 "S",
                 'T', Blocks.torch,
                 'S', Items.slime_ball
+        );
+
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_TORCH),
+                "T",
+                "C",
+                'T', Blocks.torch,
+                'C', Items.clay_ball
         );
 
         if(event.getSide() == Side.CLIENT)
@@ -74,8 +80,6 @@ public class ThrowableTorchMod
                     new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
                             ItemThrowableTorch.ID, "inventory"));
         }
-
-
 
         proxy.init(event);
     }

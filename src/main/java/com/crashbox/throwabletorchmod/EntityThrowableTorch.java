@@ -1,5 +1,7 @@
 package com.crashbox.throwabletorchmod;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -12,6 +14,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -46,8 +50,8 @@ public class EntityThrowableTorch extends EntityThrowable
         {
             int x, y, z;
             boolean dropItem = false;
+            boolean destroyAndPlace = false;
             BlockPos pos = mop.getBlockPos();
-            BlockPos origPos = mop.getBlockPos();
             IBlockState state = Blocks.torch.getDefaultState();
             IBlockState withFacing = state;
 
@@ -67,50 +71,71 @@ public class EntityThrowableTorch extends EntityThrowable
                 y = pos.getY();
                 z = pos.getZ();
 
-                // We want to move to the side based on the hit.
-                switch (mop.sideHit)
+                Block block = worldObj.getBlockState(pos).getBlock();
+                if (block.getMaterial() ==  Material.vine)
                 {
-                    case DOWN: // 0
-                        // Bottom
-                        y = y - 1;
-                        break;
-                    case UP: // 1
-                        // Top
-                        y = y + 1;
-                        break;
-                    case NORTH: // 2
-                        withFacing = state.withProperty(FACING, EnumFacing.NORTH);
-                        z = z - 1;
-                        break;
-                    case SOUTH: // 3:
-                        withFacing = state.withProperty(FACING, EnumFacing.SOUTH);
-                        z = z + 1;
-                        break;
-                    case WEST: // 4:
-                        withFacing = state.withProperty(FACING, EnumFacing.WEST);
-                        x = x - 1;
-                        break;
-                    case EAST: // 5:
-                        withFacing = state.withProperty(FACING, EnumFacing.EAST);
-                        x = x + 1;
-                        break;
+                    destroyAndPlace = true;
                 }
+                else
+                {
+                    // We want to move to the side based on the hit.
+                    switch (mop.sideHit)
+                    {
+                        case DOWN: // 0
+                            // Bottom
+                            y = y - 1;
+                            break;
+                        case UP: // 1
+                            // Top
+                            y = y + 1;
+                            break;
+                        case NORTH: // 2
+                            withFacing = state.withProperty(FACING, EnumFacing.NORTH);
+                            z = z - 1;
+                            break;
+                        case SOUTH: // 3:
+                            withFacing = state.withProperty(FACING, EnumFacing.SOUTH);
+                            z = z + 1;
+                            break;
+                        case WEST: // 4:
+                            withFacing = state.withProperty(FACING, EnumFacing.WEST);
+                            x = x - 1;
+                            break;
+                        case EAST: // 5:
+                            withFacing = state.withProperty(FACING, EnumFacing.EAST);
+                            x = x + 1;
+                            break;
+                    }
 
-                // Update the block position
-                pos = new BlockPos(x, y, z);
+                    // Update the block position
+                    pos = new BlockPos(x, y, z);
+                }
             }
 
-            if (!dropItem && worldObj.isAirBlock(pos))
+            if (destroyAndPlace)
             {
-                worldObj.setBlockState(pos, withFacing);
+                worldObj.destroyBlock(pos, true);
+                worldObj.setBlockState(pos, Blocks.torch.getDefaultState());
+            }
+            else if (dropItem)
+            {
+                worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(Blocks.torch)));
             }
             else
             {
-                worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(Blocks.torch)));
+                if (worldObj.isAirBlock(pos))
+                {
+                    worldObj.setBlockState(pos, withFacing);
+                }
+                else
+                {
+                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(Blocks.torch)));
+                }
             }
 
             setDead();
         }
     }
+
 
 }
