@@ -1,5 +1,7 @@
 package com.crashbox.throwabletorchmod;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +41,7 @@ public class EntityThrowableTorch extends EntityThrowable
         {
             int x, y, z;
             boolean dropItem = false;
+            boolean destroyAndPlace = false;
 
             // Place a single torch if we didn't hit an entity
             if (mop.entityHit != null)
@@ -56,38 +59,51 @@ public class EntityThrowableTorch extends EntityThrowable
                 y = mop.blockY;
                 z = mop.blockZ;
 
-                // We want to move to the side based on the hit.
-                switch (mop.sideHit)
+                Block block = worldObj.getBlock(x,y,z);
+                if (block.getMaterial() == Material.vine)
                 {
-                    case 0:
-                        // Bottom
-                        y = y - 1;
-                        break;
-                    case 1:
-                        // Top
-                        y = y + 1;
-                        break;
-                    case 2:
-                        // North (neg Z)
-                        z = z - 1;
-                        break;
-                    case 3:
-                        // South
-                        z = z + 1;
-                        break;
-                    case 4:
-                        // West
-                        x = x - 1;
-                        break;
-                    case 5:
-                        // East
-                        x = x + 1;
-                        break;
-                }
+                    destroyAndPlace = true;
 
+                }
+                else
+                {
+
+                    // We want to move to the side based on the hit.
+                    switch (mop.sideHit)
+                    {
+                        case 0:
+                            // Bottom
+                            y = y - 1;
+                            break;
+                        case 1:
+                            // Top
+                            y = y + 1;
+                            break;
+                        case 2:
+                            // North (neg Z)
+                            z = z - 1;
+                            break;
+                        case 3:
+                            // South
+                            z = z + 1;
+                            break;
+                        case 4:
+                            // West
+                            x = x - 1;
+                            break;
+                        case 5:
+                            // East
+                            x = x + 1;
+                            break;
+                    }
+                }
             }
 
-            if (worldObj.isAirBlock(x, y, z) && ! dropItem)
+            if (destroyAndPlace)
+            {
+                worldObj.setBlock(x, y, z, Blocks.torch);
+            }
+            else if (worldObj.isAirBlock(x, y, z) && ! dropItem)
             {
                 worldObj.setBlock(x, y, z, Blocks.torch);
             }
