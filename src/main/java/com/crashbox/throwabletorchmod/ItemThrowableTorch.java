@@ -8,26 +8,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
- * Created by andrew on 2/22/15.
+ * Base class for all throwable torches.
  */
 public class ItemThrowableTorch extends Item
 {
-    public static String ID = "throwableTorch";
+    protected enum Type { SLIME, CLAY, MAGMA }
 
-    public static ItemThrowableTorch registerItem()
-    {
-        ItemThrowableTorch item = new ItemThrowableTorch();
-        GameRegistry.registerItem(item, ItemThrowableTorch.ID);
-        return item;
-    }
+//    public static ItemThrowableTorch registerItem()
+//    {
+//        ItemThrowableTorch item = new ItemThrowableTorch();
+//        GameRegistry.registerItem(item, ItemThrowableTorch.ID);
+//        return item;
+//    }
 
-    public ItemThrowableTorch()
+    protected ItemThrowableTorch(String unlocalizedName, Type type)
     {
+        _type = type;
+
         setMaxStackSize(64);
         setCreativeTab(CreativeTabs.tabDecorations);
 
-        setUnlocalizedName(ID);
-        //setTextureName("throwableTorchMod:throwableTorch");
+        setUnlocalizedName(unlocalizedName);
     }
 
     /**
@@ -43,10 +44,23 @@ public class ItemThrowableTorch extends Item
         //par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
         if (!world.isRemote)
         {
-            world.spawnEntityInWorld(new EntityThrowableTorch(world, entityPlayer));
+            switch (_type)
+            {
+                case SLIME:
+                    world.spawnEntityInWorld(new EntityThrowableSlimeTorch(world, entityPlayer));
+                    break;
+                case CLAY:
+                    world.spawnEntityInWorld(new EntityThrowableClayTorch(world, entityPlayer));
+                    break;
+                case MAGMA:
+                    world.spawnEntityInWorld(new EntityThrowableMagmaTorch(world, entityPlayer));
+                    break;
+            }
         }
 
         return par1ItemStack;
     }
+
+    private final Type _type;
 
 }

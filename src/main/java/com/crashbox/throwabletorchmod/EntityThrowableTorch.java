@@ -11,34 +11,44 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 /**
- * Created by andrew on 2/22/15.
+ * Base class for throwable entity.
  */
 public class EntityThrowableTorch extends EntityThrowable
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-    public EntityThrowableTorch(World world)
+    protected EntityThrowableTorch(World world, boolean ignites)
     {
         super(world);
+        _ignites = ignites;
     }
 
-    public EntityThrowableTorch(World world, EntityPlayer playerEntity)
+    protected EntityThrowableTorch(World world, EntityPlayer playerEntity, boolean ignites)
     {
         super(world, playerEntity);
+        _ignites = ignites;
     }
 
-    public EntityThrowableTorch(World world, double x, double y, double z)
+    protected EntityThrowableTorch(World world, double x, double y, double z, boolean ignites)
     {
         super(world, x, y, z);
+        _ignites = ignites;
     }
+
+//    @Override
+//    protected float getGravityVelocity()
+//    {
+//        return 0.0F;
+//    }
+
+    private enum Action { PLACE, DESTROY_PLACE, DROP, NONE}
 
     @Override
     protected void onImpact(MovingObjectPosition mop)
@@ -49,11 +59,14 @@ public class EntityThrowableTorch extends EntityThrowable
         if (!worldObj.isRemote)
         {
             int x, y, z;
-            boolean dropItem = false;
-            boolean destroyAndPlace = false;
             BlockPos pos = mop.getBlockPos();
-            IBlockState state = Blocks.torch.getDefaultState();
+
+            Block placeBlock = Blocks.torch;
+            //Block placeBlock = Blocks.cobblestone;
+            IBlockState state = placeBlock.getDefaultState();
             IBlockState withFacing = state;
+
+            Action action = Action.PLACE;
 
             // Place a single torch if we didn't hit an entity
             if (mop.entityHit != null)
@@ -63,7 +76,19 @@ public class EntityThrowableTorch extends EntityThrowable
                 y = (int) entity.posY;
                 z = (int) entity.posZ;
 
-                dropItem = true;
+                if (!entity.isImmuneToFire())
+                {
+                    entity.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);
+                    if (_ignites)
+                    {
+                        action = Action.NONE;
+                        entity.setFire(6);
+                    }
+                    else
+                    {
+                        action = Action.DROP;
+                    }
+                }
             }
             else
             {
@@ -74,7 +99,7 @@ public class EntityThrowableTorch extends EntityThrowable
                 Block block = worldObj.getBlockState(pos).getBlock();
                 if (block.getMaterial() ==  Material.vine)
                 {
-                    destroyAndPlace = true;
+                    action = Action.DESTROY_PLACE;
                 }
                 else
                 {
@@ -112,30 +137,28 @@ public class EntityThrowableTorch extends EntityThrowable
                 }
             }
 
-            if (destroyAndPlace)
+            switch (action)
             {
-                worldObj.destroyBlock(pos, true);
-                worldObj.setBlockState(pos, Blocks.torch.getDefaultState());
-            }
-            else if (dropItem)
-            {
-                worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(Blocks.torch)));
-            }
-            else
-            {
-                if (worldObj.isAirBlock(pos))
-                {
-                    worldObj.setBlockState(pos, withFacing);
-                }
-                else
-                {
-                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(Blocks.torch)));
-                }
+                case PLACE:
+                    if (worldObj.isAirBlock(pos))
+                        worldObj.setBlockState(pos, withFacing);
+                    else
+                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
+                    break;
+                case DESTROY_PLACE:
+                    worldObj.destroyBlock(pos, true);
+                    worldObj.setBlockState(pos, placeBlock.getDefaultState());
+                    break;
+                case DROP:
+                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
+                    break;
+                case NONE:
+                    break;
             }
 
             setDead();
         }
     }
 
-
+    private final boolean _ignites;
 }

@@ -1,7 +1,7 @@
 {
   "parent": "builtin/generated",
   "textures": {
-    "layer0": "throwabletorchmod:items/throwableTorch"
+    "layer0": "throwabletorchmod:items/throwableSlimeTorch"
   },
   "display": {
     "thirdperson": {

@@ -28,10 +28,12 @@ public class ThrowableTorchMod
     // http://greyminecraftcoder.blogspot.com/2013/11/how-forge-starts-up-your-code.html
     public static final String MODID = "throwabletorchmod";
     public static final String NAME = "ThrowableTorchMod";
-    public static final String VERSION = "1.2";
+    public static final String VERSION = "1.3";
 
     // These are the blocks and items we load that other parts need to use.
-    public static ItemThrowableTorch ITEM_THROWABLE_TORCH;
+    public static ItemThrowableTorch ITEM_THROWABLE_SLIME_TORCH;
+    public static ItemThrowableTorch ITEM_THROWABLE_CLAY_TORCH;
+    public static ItemThrowableTorch ITEM_THROWABLE_MAGMA_TORCH;
 
     @Instance(value = ThrowableTorchMod.MODID)
     public static ThrowableTorchMod instance;
@@ -44,7 +46,15 @@ public class ThrowableTorchMod
     public void preInit(FMLPreInitializationEvent event)
     {
         // Load config, create blocks, items, etc and register them
-        ITEM_THROWABLE_TORCH = ItemThrowableTorch.registerItem();
+
+        ITEM_THROWABLE_SLIME_TORCH = new ItemThrowableSlimeTorch();
+        GameRegistry.registerItem(ITEM_THROWABLE_SLIME_TORCH, ItemThrowableSlimeTorch.ID);
+
+        ITEM_THROWABLE_CLAY_TORCH = new ItemThrowableClayTorch();
+        GameRegistry.registerItem(ITEM_THROWABLE_CLAY_TORCH, ItemThrowableClayTorch.ID);
+
+        ITEM_THROWABLE_MAGMA_TORCH = new ItemThrowableMagmaTorch();
+        GameRegistry.registerItem(ITEM_THROWABLE_MAGMA_TORCH, ItemThrowableMagmaTorch.ID);
 
         proxy.preInit(event);
     }
@@ -55,30 +65,55 @@ public class ThrowableTorchMod
         // Add entities
         // TODO:  Since I create the things server side, should this be in common???
         int entityID = 0;
-        EntityRegistry.registerModEntity(EntityThrowableTorch.class, "Throwable Torch",
+
+        // TODO:  Localization
+
+        EntityRegistry.registerModEntity(EntityThrowableSlimeTorch.class, "Throwable Slime Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
-        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_TORCH),
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_SLIME_TORCH),
                 "T",
                 "S",
                 'T', Blocks.torch,
                 'S', Items.slime_ball
         );
 
-        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_TORCH),
+        EntityRegistry.registerModEntity(EntityThrowableClayTorch.class, "Throwable Clay Torch",
+                ++entityID, ThrowableTorchMod.instance, 80, 10, true);
+
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_CLAY_TORCH),
                 "T",
                 "C",
                 'T', Blocks.torch,
                 'C', Items.clay_ball
         );
 
+        EntityRegistry.registerModEntity(EntityThrowableMagmaTorch.class, "Throwable Magma Torch",
+                ++entityID, ThrowableTorchMod.instance, 80, 10, true);
+
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MAGMA_TORCH),
+                "T",
+                "M",
+                'T', Blocks.torch,
+                'M', Items.magma_cream
+        );
+
+        // TODO: Should I put this in client?
         if(event.getSide() == Side.CLIENT)
         {
             RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-            renderItem.getItemModelMesher().register(ITEM_THROWABLE_TORCH, 0,
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_SLIME_TORCH, 0,
                     new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
-                            ItemThrowableTorch.ID, "inventory"));
+                            ItemThrowableSlimeTorch.ID, "inventory"));
+
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_CLAY_TORCH, 0,
+                    new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
+                            ItemThrowableClayTorch.ID, "inventory"));
+
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_MAGMA_TORCH, 0,
+                    new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
+                            ItemThrowableMagmaTorch.ID, "inventory"));
         }
 
         proxy.init(event);
