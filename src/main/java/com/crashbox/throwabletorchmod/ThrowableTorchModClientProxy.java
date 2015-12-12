@@ -22,8 +22,14 @@ public class ThrowableTorchModClientProxy extends ThrowableTorchModCommonProxy
         super.init(e);
 
         // Add renderers.
-        RenderingRegistry.registerEntityRenderingHandler(EntityThrowableTorch.class,
-                new RenderSnowball(ThrowableTorchMod.ITEM_THROWABLE_TORCH));
+        RenderingRegistry.registerEntityRenderingHandler(EntityThrowableSlimeTorch.class,
+                new RenderSnowball(ThrowableTorchMod.ITEM_THROWABLE_SLIME_TORCH));
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityThrowableClayTorch.class,
+                new RenderSnowball(ThrowableTorchMod.ITEM_THROWABLE_CLAY_TORCH));
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityThrowableMagmaTorch.class,
+                new RenderSnowball(ThrowableTorchMod.ITEM_THROWABLE_MAGMA_TORCH));
     }
 
     @Override
