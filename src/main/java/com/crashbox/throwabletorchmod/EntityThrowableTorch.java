@@ -48,8 +48,6 @@ public class EntityThrowableTorch extends EntityThrowable
 //        return 0.0F;
 //    }
 
-    private enum Action { PLACE, DESTROY_PLACE, DROP, NONE}
-
     @Override
     protected void onImpact(MovingObjectPosition mop)
     {
@@ -160,5 +158,6 @@ public class EntityThrowableTorch extends EntityThrowable
         }
     }
 
+    private enum Action { PLACE, DESTROY_PLACE, DROP, NONE}
     private final boolean _ignites;
 }

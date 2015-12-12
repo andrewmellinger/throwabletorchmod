@@ -27,8 +27,6 @@ public class ThrowableTorchModClientProxy extends ThrowableTorchModCommonProxy
 
         RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-//        RenderingRegistry.registerEntityRenderingHandler(EntityThrowableTorch.class,
-//                new RenderSnowball(ThrowableTorchMod.ITEM_THROWABLE_SLIME_TORCH));
 
         RenderingRegistry.registerEntityRenderingHandler(EntityThrowableSlimeTorch.class,
                 new RenderSnowball(renderManager, ThrowableTorchMod.ITEM_THROWABLE_SLIME_TORCH, renderItem));

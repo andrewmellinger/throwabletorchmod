@@ -14,13 +14,6 @@ public class ItemThrowableTorch extends Item
 {
     protected enum Type { SLIME, CLAY, MAGMA }
 
-//    public static ItemThrowableTorch registerItem()
-//    {
-//        ItemThrowableTorch item = new ItemThrowableTorch();
-//        GameRegistry.registerItem(item, ItemThrowableTorch.ID);
-//        return item;
-//    }
-
     protected ItemThrowableTorch(String unlocalizedName, Type type)
     {
         _type = type;

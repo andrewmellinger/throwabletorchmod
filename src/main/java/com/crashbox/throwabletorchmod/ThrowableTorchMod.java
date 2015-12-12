@@ -98,7 +98,7 @@ public class ThrowableTorchMod
                 'M', Items.magma_cream
         );
 
-        // TODO: Should I put this in client?
+        // TODO: Should I put this in client? Seems fine here and is easier to manage.
         if(event.getSide() == Side.CLIENT)
         {
             RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
