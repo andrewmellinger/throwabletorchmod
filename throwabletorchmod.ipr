@@ -15,6 +15,11 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="throwabletorchmod_api" target="1.6" />
+      <module name="throwabletorchmod_main" target="1.6" />
+      <module name="throwabletorchmod_test" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="" />
   <component name="DependencyValidationManager">
@@ -23,6 +28,20 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
+  </component>
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
   </component>
   <component name="GradleUISettings">
     <setting name="root" />
@@ -171,7 +190,10 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/throwabletorchmod.iml" filepath="$PROJECT_DIR$/throwabletorchmod.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/throwabletorchmod.iml" filepath="$PROJECT_DIR$/.idea/modules/throwabletorchmod.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/throwabletorchmod_api.iml" filepath="$PROJECT_DIR$/.idea/modules/throwabletorchmod_api.iml" group="throwabletorchmod" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/throwabletorchmod_main.iml" filepath="$PROJECT_DIR$/.idea/modules/throwabletorchmod_main.iml" group="throwabletorchmod" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/throwabletorchmod_test.iml" filepath="$PROJECT_DIR$/.idea/modules/throwabletorchmod_test.iml" group="throwabletorchmod" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
@@ -181,6 +203,7 @@
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
   <component name="masterDetails">
