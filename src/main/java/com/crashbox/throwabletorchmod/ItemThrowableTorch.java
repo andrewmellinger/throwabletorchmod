@@ -1,6 +1,5 @@
 package com.crashbox.throwabletorchmod;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,7 +18,7 @@ public class ItemThrowableTorch extends Item
         _type = type;
 
         setMaxStackSize(64);
-        setCreativeTab(CreativeTabs.tabDecorations);
+        setCreativeTab(CreativeTabs.DECORATIONS);
 
         setUnlocalizedName(unlocalizedName);
     }
@@ -31,7 +30,7 @@ public class ItemThrowableTorch extends Item
     {
         if (!entityPlayer.capabilities.isCreativeMode)
         {
-            par1ItemStack.stackSize--;
+            --par1ItemStack.stackSize;
         }
 
         //par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));

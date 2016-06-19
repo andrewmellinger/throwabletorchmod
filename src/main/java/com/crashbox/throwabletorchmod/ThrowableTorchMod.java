@@ -1,8 +1,8 @@
 package com.crashbox.throwabletorchmod;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -74,8 +74,8 @@ public class ThrowableTorchMod
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_SLIME_TORCH),
                 "T",
                 "S",
-                'T', Blocks.torch,
-                'S', Items.slime_ball
+                'T', Blocks.TORCH,
+                'S', Items.SLIME_BALL
         );
 
         EntityRegistry.registerModEntity(EntityThrowableClayTorch.class, "Throwable Clay Torch",
@@ -84,8 +84,8 @@ public class ThrowableTorchMod
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_CLAY_TORCH),
                 "T",
                 "C",
-                'T', Blocks.torch,
-                'C', Items.clay_ball
+                'T', Blocks.TORCH,
+                'C', Items.CLAY_BALL
         );
 
         EntityRegistry.registerModEntity(EntityThrowableMagmaTorch.class, "Throwable Magma Torch",
@@ -94,8 +94,8 @@ public class ThrowableTorchMod
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MAGMA_TORCH),
                 "T",
                 "M",
-                'T', Blocks.torch,
-                'M', Items.magma_cream
+                'T', Blocks.TORCH,
+                'M', Items.MAGMA_CREAM
         );
 
         // TODO: Should I put this in client? Seems fine here and is easier to manage.

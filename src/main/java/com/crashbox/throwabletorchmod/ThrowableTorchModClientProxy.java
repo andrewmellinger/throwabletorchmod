@@ -1,11 +1,8 @@
 package com.crashbox.throwabletorchmod;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -21,7 +18,8 @@ public class ThrowableTorchModClientProxy extends ThrowableTorchModCommonProxy
         super.preInit(e);
     }
 
-    @Override
+    @SuppressWarnings({ "deprecation", "unchecked", "rawtypes" })
+	@Override
     public void init(FMLInitializationEvent e)
     {
         super.init(e);
