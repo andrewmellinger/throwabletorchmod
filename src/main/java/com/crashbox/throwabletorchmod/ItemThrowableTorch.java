@@ -1,14 +1,10 @@
 package com.crashbox.throwabletorchmod;
 
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -23,7 +19,7 @@ public class ItemThrowableTorch extends Item
         _type = type;
 
         setMaxStackSize(64);
-        setCreativeTab(CreativeTabs.DECORATIONS);
+        setCreativeTab(CreativeTabs.tabDecorations);
 
         setUnlocalizedName(unlocalizedName);
     }
@@ -31,9 +27,7 @@ public class ItemThrowableTorch extends Item
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer entityPlayer, EnumHand hand)
+    public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer entityPlayer)
     {
         if (!entityPlayer.capabilities.isCreativeMode)
         {
@@ -46,31 +40,18 @@ public class ItemThrowableTorch extends Item
             switch (_type)
             {
                 case SLIME:
-                    EntityThrowableSlimeTorch entitythrowst = new EntityThrowableSlimeTorch(world, entityPlayer);
-                    entitythrowst.setHeadingFromThrower(entityPlayer, entityPlayer.rotationPitch, entityPlayer.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    world.spawnEntityInWorld(entitythrowst);
+                    world.spawnEntityInWorld(new EntityThrowableSlimeTorch(world, entityPlayer));
                     break;
                 case CLAY:
-                    EntityThrowableClayTorch entitythrowct = new EntityThrowableClayTorch(world, entityPlayer);
-                    entitythrowct.setHeadingFromThrower(entityPlayer, entityPlayer.rotationPitch, entityPlayer.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    world.spawnEntityInWorld(entitythrowct);
+                    world.spawnEntityInWorld(new EntityThrowableClayTorch(world, entityPlayer));
                     break;
                 case MAGMA:
-                    EntityThrowableMagmaTorch entitythrowmt = new EntityThrowableMagmaTorch(world, entityPlayer);
-                    entitythrowmt.setHeadingFromThrower(entityPlayer, entityPlayer.rotationPitch, entityPlayer.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    world.spawnEntityInWorld(entitythrowmt);
+                    world.spawnEntityInWorld(new EntityThrowableMagmaTorch(world, entityPlayer));
                     break;
             }
         }
 
-        return super.onItemRightClick(par1ItemStack, world, entityPlayer, hand);
-    }
-
-    @Override
-    public EnumActionResult onItemUse(ItemStack par1ItemStack, EntityPlayer entityPlayer, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-        this.onItemRightClick(par1ItemStack, world, entityPlayer, hand);
-        return EnumActionResult.PASS;
+        return par1ItemStack;
     }
 
     private final Type _type;
