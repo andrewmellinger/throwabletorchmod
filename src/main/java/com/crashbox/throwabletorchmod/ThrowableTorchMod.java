@@ -1,8 +1,11 @@
 package com.crashbox.throwabletorchmod;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -12,9 +15,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 
 
@@ -28,7 +28,7 @@ public class ThrowableTorchMod
     // http://greyminecraftcoder.blogspot.com/2013/11/how-forge-starts-up-your-code.html
     public static final String MODID = "throwabletorchmod";
     public static final String NAME = "ThrowableTorchMod";
-    public static final String VERSION = "1.3";
+    public static final String VERSION = "1.4";
 
     // These are the blocks and items we load that other parts need to use.
     public static ItemThrowableTorch ITEM_THROWABLE_SLIME_TORCH;
@@ -39,13 +39,14 @@ public class ThrowableTorchMod
     public static ThrowableTorchMod instance;
 
     @SidedProxy(clientSide = "com.crashbox.throwabletorchmod.ThrowableTorchModClientProxy",
-                serverSide = "com.crashbox.throwabletorchmod.ThrowableTorchModCommonProxy")
+            serverSide = "com.crashbox.throwabletorchmod.ThrowableTorchModCommonProxy")
     public static ThrowableTorchModCommonProxy proxy;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         // Load config, create blocks, items, etc and register them
+
 
         ITEM_THROWABLE_SLIME_TORCH = new ItemThrowableSlimeTorch();
         GameRegistry.registerItem(ITEM_THROWABLE_SLIME_TORCH, ItemThrowableSlimeTorch.ID);
@@ -74,8 +75,8 @@ public class ThrowableTorchMod
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_SLIME_TORCH),
                 "T",
                 "S",
-                'T', Blocks.torch,
-                'S', Items.slime_ball
+                'T', Blocks.TORCH,
+                'S', Items.SLIME_BALL
         );
 
         EntityRegistry.registerModEntity(EntityThrowableClayTorch.class, "Throwable Clay Torch",
@@ -84,8 +85,8 @@ public class ThrowableTorchMod
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_CLAY_TORCH),
                 "T",
                 "C",
-                'T', Blocks.torch,
-                'C', Items.clay_ball
+                'T', Blocks.TORCH,
+                'C', Items.CLAY_BALL
         );
 
         EntityRegistry.registerModEntity(EntityThrowableMagmaTorch.class, "Throwable Magma Torch",
@@ -94,8 +95,8 @@ public class ThrowableTorchMod
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MAGMA_TORCH),
                 "T",
                 "M",
-                'T', Blocks.torch,
-                'M', Items.magma_cream
+                'T', Blocks.TORCH,
+                'M', Items.MAGMA_CREAM
         );
 
         // TODO: Should I put this in client? Seems fine here and is easier to manage.
