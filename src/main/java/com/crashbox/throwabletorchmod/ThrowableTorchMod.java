@@ -28,7 +28,7 @@ public class ThrowableTorchMod
     // http://greyminecraftcoder.blogspot.com/2013/11/how-forge-starts-up-your-code.html
     public static final String MODID = "throwabletorchmod";
     public static final String NAME = "ThrowableTorchMod";
-    public static final String VERSION = "1.4.1";
+    public static final String VERSION = "1.4";
 
     // These are the blocks and items we load that other parts need to use.
     public static ItemThrowableTorch ITEM_THROWABLE_SLIME_TORCH;
