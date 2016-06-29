@@ -5,10 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -64,13 +61,6 @@ public class ItemThrowableTorch extends Item
         }
 
         return super.onItemRightClick(par1ItemStack, world, entityPlayer, hand);
-    }
-
-    @Override
-    public EnumActionResult onItemUse(ItemStack par1ItemStack, EntityPlayer entityPlayer, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-        this.onItemRightClick(par1ItemStack, world, entityPlayer, hand);
-        return EnumActionResult.PASS;
     }
 
     private final Type _type;
