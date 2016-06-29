@@ -1,20 +1,20 @@
 package com.crashbox.throwabletorchmod;
 
+import com.jcraft.jorbis.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.client.renderer.entity.RenderSnowball;
 
 /** Copyright 2015 Andrew O. Mellinger */
 public class ThrowableTorchModClientProxy extends ThrowableTorchModCommonProxy
 {
+
     @Override
     public void preInit(FMLPreInitializationEvent e)
     {
@@ -26,7 +26,10 @@ public class ThrowableTorchModClientProxy extends ThrowableTorchModCommonProxy
     {
         super.init(e);
 
-        // Add renderers.
+        Block block;
+        Item blockItem;
+
+        //  Add renderers.
 
         final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();

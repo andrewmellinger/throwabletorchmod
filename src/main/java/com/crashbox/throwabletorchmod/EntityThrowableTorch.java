@@ -1,7 +1,7 @@
 package com.crashbox.throwabletorchmod;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -10,122 +10,103 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
 
 /**
  * Base class for throwable entity.
  */
-public class EntityThrowableTorch extends EntityThrowable
-{
+public class EntityThrowableTorch extends EntityThrowable {
+
+    BlockPos posFinal = null;
+    int xf, yf, zf;
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-    protected EntityThrowableTorch(World world, boolean ignites)
-    {
+    protected EntityThrowableTorch(World world, boolean ignites) {
         super(world);
         _ignites = ignites;
     }
 
-    protected EntityThrowableTorch(World world, EntityPlayer playerEntity, boolean ignites)
-    {
+    protected EntityThrowableTorch(World world, EntityPlayer playerEntity, boolean ignites) {
         super(world, playerEntity);
         _ignites = ignites;
     }
 
-    protected EntityThrowableTorch(World world, double x, double y, double z, boolean ignites)
-    {
+    protected EntityThrowableTorch(World world, double x, double y, double z, boolean ignites) {
         super(world, x, y, z);
         _ignites = ignites;
     }
 
-//    @Override
-//    protected float getGravityVelocity()
-//    {
-//        return 0.0F;
-//    }
-
     @Override
-    protected void onImpact(MovingObjectPosition mop)
-    {
-        // isRemote true on client, false on server
-        // We ONLY want to do the creation part on the server.  We could do particles locally,
-        // but since we are creating blocks we really should let the server creat them.
-        if (!worldObj.isRemote)
-        {
+    protected void onImpact(RayTraceResult mop) {
+        if (!worldObj.isRemote) {
             int x, y, z;
             BlockPos pos = mop.getBlockPos();
-
-            Block placeBlock = Blocks.torch;
-            //Block placeBlock = Blocks.cobblestone;
+            Block placeBlock = Blocks.TORCH;
             IBlockState state = placeBlock.getDefaultState();
             IBlockState withFacing = state;
-
             Action action = Action.PLACE;
+            Entity entity = mop.entityHit;
+
+            if (mop.entityHit != null) {
+            }
 
             // Place a single torch if we didn't hit an entity
-            if (mop.entityHit != null)
-            {
-                Entity entity = mop.entityHit;
+            if (mop.entityHit != null) {
                 x = (int) entity.posX;
                 y = (int) entity.posY;
                 z = (int) entity.posZ;
 
-                if (!entity.isImmuneToFire())
-                {
+                if (!entity.isImmuneToFire()) {
+                    // Check if entity is immune to fire and if not set fire
                     entity.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);
-                    if (_ignites)
-                    {
+                    if (_ignites) {
+                        System.out.println("setting on fire");
                         action = Action.NONE;
                         entity.setFire(6);
-                    }
-                    else
-                    {
+                    } else {
                         action = Action.DROP;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 x = pos.getX();
                 y = pos.getY();
                 z = pos.getZ();
+                xf = pos.getX();
+                yf = pos.getY();
+                zf = pos.getZ();
+                posFinal = new BlockPos(xf, yf, zf);
 
-                Block block = worldObj.getBlockState(pos).getBlock();
-                if (block.getMaterial() ==  Material.vine)
-                {
+                Block block = worldObj.getBlockState(new BlockPos(xf, yf, zf)).getBlock();
+                // CHeck for Dead Bushes, Vines, Snow Layers, or Tall Grass and if found break
+                if (block == Blocks.DEADBUSH || block == Blocks.VINE || block == Blocks.SNOW_LAYER || block == Blocks.TALLGRASS) {
                     action = Action.DESTROY_PLACE;
-                }
-                else
-                {
+                } else {
                     // We want to move to the side based on the hit.
-                    switch (mop.sideHit)
-                    {
-                        case DOWN: // 0
-                            // Bottom
+                    switch (mop.sideHit) {
+                        case DOWN:
                             y = y - 1;
                             break;
-                        case UP: // 1
-                            // Top
+                        case UP:
                             y = y + 1;
                             break;
-                        case NORTH: // 2
-                            withFacing = state.withProperty(FACING, EnumFacing.NORTH);
+                        case NORTH:
+                            withFacing = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH);
                             z = z - 1;
                             break;
-                        case SOUTH: // 3:
-                            withFacing = state.withProperty(FACING, EnumFacing.SOUTH);
+                        case SOUTH:
+                            withFacing = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.SOUTH);
                             z = z + 1;
                             break;
-                        case WEST: // 4:
-                            withFacing = state.withProperty(FACING, EnumFacing.WEST);
+                        case WEST:
+                            withFacing = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST);
                             x = x - 1;
                             break;
-                        case EAST: // 5:
-                            withFacing = state.withProperty(FACING, EnumFacing.EAST);
+                        case EAST:
+                            withFacing = Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST);
                             x = x + 1;
                             break;
                     }
@@ -135,8 +116,7 @@ public class EntityThrowableTorch extends EntityThrowable
                 }
             }
 
-            switch (action)
-            {
+            switch (action) {
                 case PLACE:
                     if (worldObj.isAirBlock(pos))
                         worldObj.setBlockState(pos, withFacing);
@@ -145,10 +125,12 @@ public class EntityThrowableTorch extends EntityThrowable
                     break;
                 case DESTROY_PLACE:
                     worldObj.destroyBlock(pos, true);
-                    worldObj.setBlockState(pos, placeBlock.getDefaultState());
+                    //worldObj.setBlockState(pos, placeBlock.getDefaultState());
+                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
                     break;
                 case DROP:
                     worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
+                    System.out.println("Should have dropped");
                     break;
                 case NONE:
                     break;
@@ -158,6 +140,9 @@ public class EntityThrowableTorch extends EntityThrowable
         }
     }
 
-    private enum Action { PLACE, DESTROY_PLACE, DROP, NONE}
+    private enum Action {
+        PLACE, DESTROY_PLACE, DROP, NONE
+    }
+
     private final boolean _ignites;
 }
