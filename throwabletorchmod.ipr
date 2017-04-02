@@ -9,12 +9,15 @@
     <wildcardResourcePatterns>
       <entry name="!?*.groovy" />
       <entry name="!?*.java" />
+      <entry name="!?*.class" />
+      <entry name="!?*.scala" />
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="1.6" />
   </component>
   <component name="CopyrightManager" default="" />
   <component name="DependencyValidationManager">
