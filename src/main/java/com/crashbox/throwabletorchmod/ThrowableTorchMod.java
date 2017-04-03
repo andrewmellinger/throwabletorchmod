@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -39,7 +40,7 @@ public class ThrowableTorchMod
     public static ThrowableTorchMod instance;
 
     @SidedProxy(clientSide = "com.crashbox.throwabletorchmod.ThrowableTorchModClientProxy",
-            serverSide = "com.crashbox.throwabletorchmod.ThrowableTorchModCommonProxy")
+                serverSide = "com.crashbox.throwabletorchmod.ThrowableTorchModCommonProxy")
     public static ThrowableTorchModCommonProxy proxy;
 
     @EventHandler
@@ -47,15 +48,17 @@ public class ThrowableTorchMod
     {
         // Load config, create blocks, items, etc and register them
 
-
         ITEM_THROWABLE_SLIME_TORCH = new ItemThrowableSlimeTorch();
-        GameRegistry.registerItem(ITEM_THROWABLE_SLIME_TORCH, ItemThrowableSlimeTorch.ID);
+        ITEM_THROWABLE_SLIME_TORCH.setRegistryName(ItemThrowableSlimeTorch.ID);
+        GameRegistry.register(ITEM_THROWABLE_SLIME_TORCH);
 
         ITEM_THROWABLE_CLAY_TORCH = new ItemThrowableClayTorch();
-        GameRegistry.registerItem(ITEM_THROWABLE_CLAY_TORCH, ItemThrowableClayTorch.ID);
+        ITEM_THROWABLE_CLAY_TORCH.setRegistryName(ItemThrowableClayTorch.ID);
+        GameRegistry.register(ITEM_THROWABLE_CLAY_TORCH);
 
         ITEM_THROWABLE_MAGMA_TORCH = new ItemThrowableMagmaTorch();
-        GameRegistry.registerItem(ITEM_THROWABLE_MAGMA_TORCH, ItemThrowableMagmaTorch.ID);
+        ITEM_THROWABLE_MAGMA_TORCH.setRegistryName(ItemThrowableMagmaTorch.ID);
+        GameRegistry.register(ITEM_THROWABLE_MAGMA_TORCH);
 
         proxy.preInit(event);
     }
@@ -68,8 +71,8 @@ public class ThrowableTorchMod
         int entityID = 0;
 
         // TODO:  Localization
-
-        EntityRegistry.registerModEntity(EntityThrowableSlimeTorch.class, "Throwable Slime Torch",
+        ResourceLocation reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableSlimeTorch.ID);
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableSlimeTorch.class, "Throwable Slime Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_SLIME_TORCH),
@@ -79,7 +82,8 @@ public class ThrowableTorchMod
                 'S', Items.SLIME_BALL
         );
 
-        EntityRegistry.registerModEntity(EntityThrowableClayTorch.class, "Throwable Clay Torch",
+        reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableClayTorch.ID);
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableClayTorch.class, "Throwable Clay Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_CLAY_TORCH),
@@ -89,7 +93,9 @@ public class ThrowableTorchMod
                 'C', Items.CLAY_BALL
         );
 
-        EntityRegistry.registerModEntity(EntityThrowableMagmaTorch.class, "Throwable Magma Torch",
+
+        reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableMagmaTorch.ID);
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableMagmaTorch.class, "Throwable Magma Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MAGMA_TORCH),

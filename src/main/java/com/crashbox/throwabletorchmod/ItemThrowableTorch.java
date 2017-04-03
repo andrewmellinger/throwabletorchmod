@@ -30,11 +30,15 @@ public class ItemThrowableTorch extends Item
      */
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer entityPlayer, EnumHand hand)
+    //public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer entityPlayer, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityPlayer, EnumHand hand)
     {
+        ItemStack parItemStack = entityPlayer.getHeldItem(hand);
+
         if (!entityPlayer.capabilities.isCreativeMode)
         {
-            par1ItemStack.stackSize--;
+            //parItemStack.stackSize--;
+            parItemStack.func_190918_g(1);
         }
 
         //par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
@@ -60,7 +64,7 @@ public class ItemThrowableTorch extends Item
             }
         }
 
-        return super.onItemRightClick(par1ItemStack, world, entityPlayer, hand);
+        return super.onItemRightClick(world, entityPlayer, hand);
     }
 
     private final Type _type;
