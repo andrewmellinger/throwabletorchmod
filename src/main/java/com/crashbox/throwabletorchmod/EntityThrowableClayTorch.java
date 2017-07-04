@@ -8,18 +8,22 @@ import net.minecraft.world.World;
  */
 public class EntityThrowableClayTorch extends EntityThrowableTorch
 {
+    // These are for client side
     public EntityThrowableClayTorch(World world)
     {
-        super(world, false);
+        super(world, 0, false);
     }
 
-    public EntityThrowableClayTorch(World world, EntityPlayer playerEntity)
+    // These are for spread
+    EntityThrowableClayTorch(World worldIn, double x, double y, double z,
+            int generation, boolean ignites)
     {
-        super(world, playerEntity, false);
+        super(worldIn, x, y, z, generation, ignites);
     }
 
-    public EntityThrowableClayTorch(World world, double x, double y, double z)
+    // These are for server side
+    EntityThrowableClayTorch(World world, EntityPlayer playerEntity)
     {
-        super(world, x, y, z, false);
+        super(world, playerEntity, 0, false);
     }
 }

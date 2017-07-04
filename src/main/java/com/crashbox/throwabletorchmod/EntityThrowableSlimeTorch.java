@@ -8,18 +8,21 @@ import net.minecraft.world.World;
  */
 public class EntityThrowableSlimeTorch extends EntityThrowableTorch
 {
+    // These are for client side
     public EntityThrowableSlimeTorch(World world)
     {
-        super(world, false);
+        super(world, 0, false);
     }
 
-    public EntityThrowableSlimeTorch(World world, EntityPlayer playerEntity)
+    EntityThrowableSlimeTorch(World worldIn, double x, double y, double z,
+            int generation, boolean ignites)
     {
-        super(world, playerEntity, false);
+        super(worldIn, x, y, z, generation, ignites);
     }
 
-    public EntityThrowableSlimeTorch(World world, double x, double y, double z)
+    // These are for server side
+    EntityThrowableSlimeTorch(World world, EntityPlayer playerEntity, int generation)
     {
-        super(world, x, y, z, false);
+        super(world, playerEntity, generation, false);
     }
 }

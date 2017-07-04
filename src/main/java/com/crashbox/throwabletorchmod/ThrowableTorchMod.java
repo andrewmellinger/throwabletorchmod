@@ -1,4 +1,4 @@
-package com.crashbox.throwabletorchmod;
+ package com.crashbox.throwabletorchmod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
@@ -29,12 +29,16 @@ public class ThrowableTorchMod
     // http://greyminecraftcoder.blogspot.com/2013/11/how-forge-starts-up-your-code.html
     public static final String MODID = "throwabletorchmod";
     public static final String NAME = "ThrowableTorchMod";
-    public static final String VERSION = "1.4";
+    public static final String VERSION = "1.5";
 
     // These are the blocks and items we load that other parts need to use.
     public static ItemThrowableTorch ITEM_THROWABLE_SLIME_TORCH;
     public static ItemThrowableTorch ITEM_THROWABLE_CLAY_TORCH;
     public static ItemThrowableTorch ITEM_THROWABLE_MAGMA_TORCH;
+
+    public static ItemThrowableTorch ITEM_THROWABLE_MULTI_TORCH_TIER2;
+    public static ItemThrowableTorch ITEM_THROWABLE_MULTI_TORCH_TIER3;
+    public static ItemThrowableTorch ITEM_THROWABLE_MULTI_TORCH_TIER4;
 
     @Instance(value = ThrowableTorchMod.MODID)
     public static ThrowableTorchMod instance;
@@ -60,6 +64,18 @@ public class ThrowableTorchMod
         ITEM_THROWABLE_MAGMA_TORCH.setRegistryName(ItemThrowableMagmaTorch.ID);
         GameRegistry.register(ITEM_THROWABLE_MAGMA_TORCH);
 
+        ITEM_THROWABLE_MULTI_TORCH_TIER2 = new ItemThrowableSlimeTorchT2();
+        ITEM_THROWABLE_MULTI_TORCH_TIER2.setRegistryName(ItemThrowableSlimeTorchT2.ID);
+        GameRegistry.register(ITEM_THROWABLE_MULTI_TORCH_TIER2);
+
+        ITEM_THROWABLE_MULTI_TORCH_TIER3 = new ItemThrowableSlimeTorchT3();
+        ITEM_THROWABLE_MULTI_TORCH_TIER3.setRegistryName(ItemThrowableSlimeTorchT3.ID);
+        GameRegistry.register(ITEM_THROWABLE_MULTI_TORCH_TIER3);
+
+        ITEM_THROWABLE_MULTI_TORCH_TIER4 = new ItemThrowableSlimeTorchT4();
+        ITEM_THROWABLE_MULTI_TORCH_TIER4.setRegistryName(ItemThrowableSlimeTorchT4.ID);
+        GameRegistry.register(ITEM_THROWABLE_MULTI_TORCH_TIER4);
+
         proxy.preInit(event);
     }
 
@@ -72,7 +88,8 @@ public class ThrowableTorchMod
 
         // TODO:  Localization
         ResourceLocation reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableSlimeTorch.ID);
-        EntityRegistry.registerModEntity(reLoc, EntityThrowableSlimeTorch.class, "Throwable Slime Torch",
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableSlimeTorch.class,
+                "Throwable Slime Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_SLIME_TORCH),
@@ -83,7 +100,8 @@ public class ThrowableTorchMod
         );
 
         reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableClayTorch.ID);
-        EntityRegistry.registerModEntity(reLoc, EntityThrowableClayTorch.class, "Throwable Clay Torch",
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableClayTorch.class,
+                "Throwable Clay Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_CLAY_TORCH),
@@ -93,9 +111,9 @@ public class ThrowableTorchMod
                 'C', Items.CLAY_BALL
         );
 
-
         reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableMagmaTorch.ID);
-        EntityRegistry.registerModEntity(reLoc, EntityThrowableMagmaTorch.class, "Throwable Magma Torch",
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableMagmaTorch.class,
+                "Throwable Magma Torch",
                 ++entityID, ThrowableTorchMod.instance, 80, 10, true);
 
         GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MAGMA_TORCH),
@@ -104,6 +122,48 @@ public class ThrowableTorchMod
                 'T', Blocks.TORCH,
                 'M', Items.MAGMA_CREAM
         );
+
+        //======================================================================
+
+        reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableSlimeTorchT2.ID);
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableSlimeTorchT2.class,
+                "Throwable Slime Torch Tier1",
+                ++entityID, ThrowableTorchMod.instance, 80, 10, true);
+
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MULTI_TORCH_TIER2),
+                "-S-",
+                "SSS",
+                "-S-",
+                'S', ITEM_THROWABLE_SLIME_TORCH
+        );
+
+        reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableSlimeTorchT3.ID);
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableSlimeTorchT3.class,
+                "Throwable Slime Torch Tier2",
+                ++entityID, ThrowableTorchMod.instance, 80, 10, true);
+
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MULTI_TORCH_TIER3),
+                "-S-",
+                "STS",
+                "-S-",
+                'T', ITEM_THROWABLE_SLIME_TORCH,
+                'S', ITEM_THROWABLE_MULTI_TORCH_TIER2
+        );
+
+        reLoc = new ResourceLocation(ThrowableTorchMod.MODID, ItemThrowableSlimeTorchT4.ID);
+        EntityRegistry.registerModEntity(reLoc, EntityThrowableSlimeTorchT4.class,
+                "Throwable Slime Torch Tier3",
+                ++entityID, ThrowableTorchMod.instance, 80, 10, true);
+
+        GameRegistry.addRecipe(new ItemStack(ITEM_THROWABLE_MULTI_TORCH_TIER4),
+                "-S-",
+                "STS",
+                "-S-",
+                'T', ITEM_THROWABLE_SLIME_TORCH,
+                'S', ITEM_THROWABLE_MULTI_TORCH_TIER3
+        );
+
+        //======================================================================
 
         // TODO: Should I put this in client? Seems fine here and is easier to manage.
         if(event.getSide() == Side.CLIENT)
@@ -121,6 +181,20 @@ public class ThrowableTorchMod
             renderItem.getItemModelMesher().register(ITEM_THROWABLE_MAGMA_TORCH, 0,
                     new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
                             ItemThrowableMagmaTorch.ID, "inventory"));
+
+            //============
+
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_MULTI_TORCH_TIER2, 0,
+                    new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
+                            ItemThrowableSlimeTorchT2.ID, "inventory"));
+
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_MULTI_TORCH_TIER3, 0,
+                    new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
+                            ItemThrowableSlimeTorchT3.ID, "inventory"));
+
+            renderItem.getItemModelMesher().register(ITEM_THROWABLE_MULTI_TORCH_TIER4, 0,
+                    new ModelResourceLocation(ThrowableTorchMod.MODID + ":" +
+                            ItemThrowableSlimeTorchT4.ID, "inventory"));
         }
 
         proxy.init(event);

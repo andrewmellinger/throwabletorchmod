@@ -6,23 +6,23 @@ import net.minecraft.world.World;
 /**
  * Copyright 2015 Andrew O. Mellinger
  */
-public class EntityThrowableMagmaTorch extends EntityThrowableTorch
+public class EntityThrowableSlimeTorchT4 extends EntityThrowableTorch
 {
     // These are for client side
-    public EntityThrowableMagmaTorch(World world)
+    public EntityThrowableSlimeTorchT4(World world)
     {
-        super(world, 0, true);
+        super(world, 3, false);
     }
 
-    EntityThrowableMagmaTorch(World worldIn, double x, double y, double z,
+    EntityThrowableSlimeTorchT4(World worldIn, double x, double y, double z,
             int generation, boolean ignites)
     {
         super(worldIn, x, y, z, generation, ignites);
     }
 
     // These are for server side
-    EntityThrowableMagmaTorch(World world, EntityPlayer playerEntity)
+    EntityThrowableSlimeTorchT4(World world, EntityPlayer playerEntity, int generation)
     {
-        super(world, playerEntity, 0, true);
+        super(world, playerEntity, generation, false);
     }
 }

@@ -5,10 +5,10 @@ package com.crashbox.throwabletorchmod;
  */
 public class ItemThrowableSlimeTorch extends ItemThrowableTorch
 {
-    public static String ID = "throwableSlimeTorch";
+    public static String ID = "throwableslimetorch";
 
     public ItemThrowableSlimeTorch()
     {
-        super(ID, Type.SLIME);
+        super(ID, Type.SLIME, 0);
     }
 }

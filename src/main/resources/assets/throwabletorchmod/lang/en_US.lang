@@ -1,3 +1,6 @@
-item.throwableSlimeTorch.name=Throwable Slime Torch
-item.throwableClayTorch.name=Throwable Clay Torch
-item.throwableMagmaTorch.name=Throwable Magma Torch
+item.throwableslimetorch.name=Throwable Slime Torch
+item.throwableclaytorch.name=Throwable Clay Torch
+item.throwablemagmatorch.name=Throwable Magma Torch
+item.throwableslimetorch_t2.name=Throwable Slime Torch Tier 2
+item.throwableslimetorch_t3.name=Throwable Slime Torch Tier 3
+item.throwableslimetorch_t4.name=Throwable Slime Torch Tier 4

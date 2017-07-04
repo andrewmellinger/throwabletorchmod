@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Base class for all throwable torches.
@@ -15,9 +17,10 @@ public class ItemThrowableTorch extends Item
 {
     protected enum Type { SLIME, CLAY, MAGMA }
 
-    protected ItemThrowableTorch(String unlocalizedName, Type type)
+    protected ItemThrowableTorch(String unlocalizedName, Type type, int tier)
     {
         _type = type;
+        _tier = tier;
 
         setMaxStackSize(64);
         setCreativeTab(CreativeTabs.DECORATIONS);
@@ -28,38 +31,28 @@ public class ItemThrowableTorch extends Item
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-
     @Override
-    //public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer entityPlayer, EnumHand hand)
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityPlayer, EnumHand hand)
     {
         ItemStack parItemStack = entityPlayer.getHeldItem(hand);
 
         if (!entityPlayer.capabilities.isCreativeMode)
         {
-            //parItemStack.stackSize--;
-            parItemStack.func_190918_g(1);
+            parItemStack.shrink(1);
         }
 
-        //par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
         if (!world.isRemote)
         {
             switch (_type)
             {
                 case SLIME:
-                    EntityThrowableSlimeTorch entitythrowst = new EntityThrowableSlimeTorch(world, entityPlayer);
-                    entitythrowst.setHeadingFromThrower(entityPlayer, entityPlayer.rotationPitch, entityPlayer.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    world.spawnEntityInWorld(entitythrowst);
+                    TTUtils.throwSlimeTorch(world, entityPlayer, 0, _tier);
                     break;
                 case CLAY:
-                    EntityThrowableClayTorch entitythrowct = new EntityThrowableClayTorch(world, entityPlayer);
-                    entitythrowct.setHeadingFromThrower(entityPlayer, entityPlayer.rotationPitch, entityPlayer.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    world.spawnEntityInWorld(entitythrowct);
+                    TTUtils.throwClayTorch(world, entityPlayer, 0);
                     break;
                 case MAGMA:
-                    EntityThrowableMagmaTorch entitythrowmt = new EntityThrowableMagmaTorch(world, entityPlayer);
-                    entitythrowmt.setHeadingFromThrower(entityPlayer, entityPlayer.rotationPitch, entityPlayer.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    world.spawnEntityInWorld(entitythrowmt);
+                    TTUtils.throwMagmaTorch(world, entityPlayer, 0);
                     break;
             }
         }
@@ -68,5 +61,6 @@ public class ItemThrowableTorch extends Item
     }
 
     private final Type _type;
-
+    private int _tier = 0;
+    private static final Logger LOGGER = LogManager.getLogger();
 }

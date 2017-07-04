@@ -5,6 +5,7 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -15,39 +16,42 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Base class for throwable entity.
  */
 public class EntityThrowableTorch extends EntityThrowable
 {
-
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-
-    protected EntityThrowableTorch(World world, boolean ignites)
+    // These are for client side
+    EntityThrowableTorch(World world, int generation, boolean ignites)
     {
         super(world);
         _ignites = ignites;
+        _generation = generation;
     }
 
-    protected EntityThrowableTorch(World world, EntityPlayer playerEntity, boolean ignites)
+    EntityThrowableTorch(World worldIn, double x, double y, double z,
+            int generation, boolean ignites)
+    {
+        super(worldIn, x, y, z);
+        _ignites = ignites;
+        _generation = generation;
+    }
+
+    EntityThrowableTorch(World world, EntityPlayer playerEntity, int generation,
+            boolean ignites)
     {
         super(world, playerEntity);
         _ignites = ignites;
-    }
-
-    protected EntityThrowableTorch(World world, double x, double y, double z, boolean ignites)
-    {
-        super(world, x, y, z);
-        _ignites = ignites;
+        _generation = generation;
     }
 
     @Override
     protected void onImpact(RayTraceResult mop)
     {
-        int xf, yf, zf;
-
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             int x, y, z;
             BlockPos pos = mop.getBlockPos();
@@ -56,6 +60,13 @@ public class EntityThrowableTorch extends EntityThrowable
             Action action = Action.PLACE;
             Entity entity = mop.entityHit;
 
+            if (pos == null)
+            {
+//                LOGGER.info(">>>>>>>>>>>>>>>>>>>> POS IS NULL early, {}", mop);
+                setDead();
+                return;
+            }
+
             // Place a single torch if we didn't hit an entity
             if (mop.entityHit != null)
             {
@@ -63,7 +74,7 @@ public class EntityThrowableTorch extends EntityThrowable
                 y = (int) entity.posY;
                 z = (int) entity.posZ;
 
-                if (!entity.isImmuneToFire())
+                if (!entity.isImmuneToFire() && getThrower() != null)
                 {
                     // Check if entity is immune to fire and if not set fire
                     entity.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);
@@ -84,10 +95,8 @@ public class EntityThrowableTorch extends EntityThrowable
                 y = pos.getY();
                 z = pos.getZ();
 
-                Block block = worldObj.getBlockState(pos).getBlock();
-                // Check for Dead Bushes, Vines, Snow Layers, or Tall Grass and if found break
-                // TODO:  Eventually find some way to support mods with other breakables
-                if (block == Blocks.DEADBUSH || block == Blocks.VINE || block == Blocks.SNOW_LAYER || block == Blocks.TALLGRASS)
+                Block block = world.getBlockState(pos).getBlock();
+                if (block.isReplaceable(world, pos))
                 {
                     action = Action.DESTROY_PLACE;
                 }
@@ -127,22 +136,28 @@ public class EntityThrowableTorch extends EntityThrowable
                     // Update the block position
                     pos = new BlockPos(x, y, z);
                 }
+
+                // Spread based on new position
+                if (_generation != 0)
+                {
+                    spreadTorch(pos);
+                }
             }
 
             switch (action)
             {
                 case PLACE:
-                    if (worldObj.isAirBlock(pos))
-                        worldObj.setBlockState(pos, withFacing);
+                    if (world.isAirBlock(pos))
+                        world.setBlockState(pos, withFacing);
                     else
-                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
+                        world.spawnEntity(new EntityItem(world, x, y, z, new ItemStack(placeBlock)));
                     break;
                 case DESTROY_PLACE:
-                    worldObj.destroyBlock(pos, true);
-                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
+                    world.destroyBlock(pos, true);
+                    world.setBlockState(pos, withFacing);
                     break;
                 case DROP:
-                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, x, y, z, new ItemStack(placeBlock)));
+                    world.spawnEntity(new EntityItem(world, x, y, z, new ItemStack(placeBlock)));
                     break;
                 case NONE:
                     break;
@@ -152,10 +167,30 @@ public class EntityThrowableTorch extends EntityThrowable
         }
     }
 
+    private void spreadTorch(BlockPos pos)
+    {
+        float yaw = -90.0F;
+        for (int i = 0; i < 4; ++i)
+        {
+            TTUtils.throwSlimeTorch(world,
+                    pos.getX(),
+                    pos.getY() + 2,
+                    pos.getZ(),
+                    -60,                            // pitch
+                    yaw,                            // yaw
+                    _generation - 1);               // generation
+
+            yaw += 90.0F;
+        }
+    }
+
     private enum Action
     {
         PLACE, DESTROY_PLACE, DROP, NONE
     }
 
     private final boolean _ignites;
+    private final int _generation;
+
+    private static final Logger LOGGER = LogManager.getLogger();
 }

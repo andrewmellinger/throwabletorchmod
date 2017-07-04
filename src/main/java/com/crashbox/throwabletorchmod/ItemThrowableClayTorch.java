@@ -5,10 +5,10 @@ package com.crashbox.throwabletorchmod;
  */
 public class ItemThrowableClayTorch extends ItemThrowableTorch
 {
-    public static String ID = "throwableClayTorch";
+    public static String ID = "throwableclaytorch";
 
     public ItemThrowableClayTorch()
     {
-        super(ID, Type.CLAY);
+        super(ID, Type.CLAY, 0);
     }
 }
